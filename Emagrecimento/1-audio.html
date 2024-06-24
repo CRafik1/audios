@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html>
 <head>
   <meta charset="UTF-8">
   <title>Áudio</title>
   <link rel="stylesheet" href="https://cdn.plyr.io/3.6.7/plyr.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  <link rel="stylesheet" href="https://unpkg.com/wavesurfer.js/dist/wavesurfer.min.css">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
       
@@ -115,23 +114,16 @@
 </head>
 <body>
   <div class="audio-container" id="audioContainer">
-    <!-- Audio Plyr -->
+    <!-- Cole o link do Seu áudio Abaixo-->
     <audio class="plyr" src="https://audio.jukehost.co.uk/vcyH7DIbJjNuQSt9WnlkQ1f7pZrKZax4"></audio>
-    
-    <!-- Imagem -->
+    <!-- Cole o link da Sua imagem Abaixo-->
     <img src="https://i.postimg.cc/gJdBvYVs/Whats-App-Image-2023-12-29-at-11-34-07.jpg" alt="Imagem">
-    
-    <!-- Ícone do microfone -->
     <div class="microphone-icon">
       <i class="fas fa-microphone"></i>
     </div>
-    
-    <!-- Elemento para as ondas de áudio Wavesurfer -->
-    <div id="waveform"></div>
   </div>
   
   <script src="https://cdn.plyr.io/3.6.7/plyr.js"></script>
-  <script src="https://unpkg.com/wavesurfer.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const player = new Plyr('.plyr', {
@@ -151,13 +143,11 @@
         microphoneIcon.classList.add('blue'); // Adiciona a classe 'blue' para alterar a cor do ícone
         audioElement.classList.add('blue'); // Adiciona a classe 'blue' para alterar o background do controle deslizante
         audioElement.style.setProperty('--range-thumb-background', '#3db8ee');
-        wavesurfer.play(); // Inicia as ondas de áudio junto com o áudio
       });
 
       audioElement.addEventListener('pause', function() {
         currentTimeElement.classList.add('hide');
         durationElement.classList.remove('hide');
-        wavesurfer.pause(); // Pausa as ondas de áudio junto com o áudio
       });
 
       const audioContainer = document.getElementById('audioContainer');
@@ -166,24 +156,17 @@
         playButton.click();
       });
 
-      const wavesurfer = WaveSurfer.create({
-        container: '#waveform',
-        waveColor: '#3db8ee',
-        progressColor: '#4ad954',
-        cursorWidth: 1,
-        barWidth: 3,
-        barRadius: 3,
-        responsive: true,
+      const playPauseButton = document.getElementById('audioContainer').querySelector('.plyr__controls button[data-plyr="play"]');
+      const audioBox = document.querySelector('.audio-box');
+      playPauseButton.addEventListener('click', function() {
+        const playButton = audioContainer.querySelector('.plyr__controls button[data-plyr="play"]');
+        playButton.click();
       });
 
-      wavesurfer.load(audioElement.src);
-
-      wavesurfer.on('ready', function() {
-        wavesurfer.setVolume(0.5); // Define o volume inicial das ondas de áudio
-      });
-
-      wavesurfer.on('finish', function() {
-        player.pause(); // Pausa o áudio quando as ondas de áudio terminam
+      audioBox.addEventListener('click', function(event) {
+        event.stopPropagation(); 
+        const playButton = audioContainer.querySelector('.plyr__controls button[data-plyr="play"]');
+        playButton.click();
       });
     });
   </script>
