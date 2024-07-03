@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Áudio</title>
+  <link rel="stylesheet" href="https://cdn.plyr.io/3.6.7/plyr.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="audio-container" id="audioContainer">
+    <audio class="plyr" id="audioPlayer" src="https://audio.jukehost.co.uk/vcyH7DIbJjNuQSt9WnlkQ1f7pZrKZax4"></audio>
+    <img src="https://i.postimg.cc/gJdBvYVs/Whats-App-Image-2023-12-29-at-11-34-07.jpg" alt="Imagem">
+    <div class="microphone-icon">
+      <i class="fas fa-microphone"></i>
+    </div>
+    <div id="waveform"></div>
+  </div>
+  <script src="https://cdn.plyr.io/3.6.7/plyr.js"></script>
+  <script src="https://unpkg.com/wavesurfer.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const player = new Plyr('#audioPlayer', {
+        controls: ['play', 'progress', 'current-time', 'duration']
+      });
+
+      const audioElement = document.querySelector('#audioPlayer');
+      const currentTimeElement = document.querySelector('.plyr__time--current');
+      const durationElement = document.querySelector('.plyr__time--duration');
+      const microphoneIcon = document.querySelector('.microphone-icon');
+
+      currentTimeElement.classList.add('hide');
+
+      const wavesurfer = WaveSurfer.create({
+        container: '#waveform',
+        waveColor: '#3db8ee',
+        progressColor: '#4ad954',
+        cursorWidth: 1,
+        barWidth: 3,
+        barRadius: 3,
+        responsive: true,
+        backend: 'MediaElement',
+        mediaControls: true
+      });
+
+      wavesurfer.load(audioElement);
+
+      audioElement.addEventListener('play', function() {
+        currentTimeElement.classList.remove('hide');
+        durationElement.classList.add('hide');
+        microphoneIcon.classList.add('blue');
+        audioElement.classList.add('blue');
+        audioElement.style.setProperty('--range-thumb-background', '#3db8ee');
+        wavesurfer.play();
+      });
+
+      audioElement.addEventListener('pause', function() {
+        currentTimeElement.classList.add('hide');
+        durationElement.classList.remove('hide');
+        wavesurfer.pause();
+      });
+
+      wavesurfer.on('ready', function() {
+        wavesurfer.setVolume(0.5);
+      });
+
+      wavesurfer.on('finish', function() {
+        player.pause();
+      });
+    });
+  </script>
+</body>
+</html>
